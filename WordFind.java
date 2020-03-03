@@ -79,8 +79,8 @@ public class WordFind {
                     break; //or maybe break; ????
                 }
 
-                rowDirection = rowDirection + eastWest[i];
-                colDirection = colDirection + northSouth[i];
+                rowDirection = rowDirection + eastWest[direction];
+                colDirection = colDirection + northSouth[direction];
             }
 
 
