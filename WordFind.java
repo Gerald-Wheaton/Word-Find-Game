@@ -14,7 +14,7 @@ public class WordFind {
         BufferedReader br=new BufferedReader(fr);  //Creation of BufferedReader object
         char[][] characterGrid = new char[4][4];
         int c = 0, i = 0, j= 0;    
-        String word = "GAH"; //test string
+        String word = "MJED"; //test string
 
         //while loop to read in character file and omit anything that is not a character
         while((c = br.read()) != -1) {         //Read char by Char
@@ -57,7 +57,7 @@ public class WordFind {
                     //if word length does not exceed array bounds check if word is North
                     if ((rowIndex - word.length()) >= -1 ) {
                         if (North(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " location (" + rowIndex + "," + columnIndex + ") " + "North");
+                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North");
                             return true;
                         }
                     }
@@ -65,7 +65,7 @@ public class WordFind {
                     //if word length does not exceed array bounds check if word is South
                     if ((rowIndex + word.length()) <= colLength) {
                         if (South(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " location (" + rowIndex + "," + columnIndex + ") " + "South");
+                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented South");
                             return true;
                         }
                     }
@@ -73,7 +73,7 @@ public class WordFind {
                     //if word length does not exceed array bounds check if word is East
                     if ((columnIndex + word.length()) <= rowLength) {
                         if (East(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " location (" + rowIndex + "," + columnIndex + ") " + "East");
+                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented East");
                             return true;
                         }
                     }
@@ -81,7 +81,15 @@ public class WordFind {
                     //if word length does not exceed array bounds check if word is West
                     if ((columnIndex - word.length()) >= -1) {
                         if (West(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " location (" + rowIndex + "," + columnIndex + ") " + "West");
+                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented West");
+                            return true;
+                        }
+                    }
+
+                    //if word length does not exceed array bounds check if word is West
+                    if (rowIndex - word.length() >= -1 && columnIndex + word.length() <= rowLength) {
+                        if (NorthEast(word, wordGrid, rowIndex, columnIndex)) {
+                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North East");
                             return true;
                         }
                     }
@@ -149,6 +157,24 @@ public class WordFind {
         }
         return true;
     }
+
+    public static boolean NorthEast(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
+        int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
+        int j = 0; //allows the column index to be incremented separately from the row index
+        for (int i = rowIndex; i < word.length(); i--) {
+            //if current character in the grid != currnet character in the word exit the loop
+            if (wordGrid[i][columnIndex + j] != word.charAt(currentChar)) {
+                return false;
+            }
+            else {
+                currentChar++;
+                j++;
+            }
+        }
+        return true;
+    }
+
+
 }
 
 
