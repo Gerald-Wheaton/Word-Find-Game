@@ -29,8 +29,8 @@ public class WordFind {
             }
         }
 
-        System.out.println(characterGrid.length + " number of rows");
-        System.out.println(characterGrid[0].length + " number of columns");
+        System.out.println(characterGrid.length + " row length");
+        System.out.println(characterGrid[0].length + " column length");
 
         
 
