@@ -8,19 +8,16 @@ import java.io.IOException;
 public class WordFind {
     public static void main(String[] args) throws IOException {
 
-        File gridFile=new File("filename.txt");
-            FileReader fr1=new FileReader(gridFile);
-            BufferedReader br1=new BufferedReader(fr1);
-        File wordList=new File("wordsList.txt");
-            FileReader fr2=new FileReader(wordList);
-            BufferedReader br2=new BufferedReader(fr2);
-
+        File gridFile=new File("cashiers.txt");
+        FileReader fr=new FileReader(gridFile);
+        BufferedReader br=new BufferedReader(fr);
+        
         char[][] characterGrid = new char[4][4]; //contains the 2d character grid
         int c = 0, i = 0, j= 0;    
-        //String word = "MIGA"; //test string
+        String word = "MJED"; //test string
 
         //while loop to read in grid of characters file and omit anything that is not a character
-        while((c = br1.read()) != -1) {         //Read char by Char
+        while((c = br.read()) != -1) {         //Read char by Char
             char character = (char) c;          //converting integer to character
             if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
                 j = 0;
@@ -32,21 +29,11 @@ public class WordFind {
             }
         }
 
-        for (int q = 0; q < 4; q++) {
-            for (int g = 0; g < 4; g++) {
-                System.out.print(characterGrid[q][g]);
-            }
-            System.out.println();
-        }
+        System.out.println(characterGrid.length + " number of rows");
+        System.out.println(characterGrid[0].length + " number of columns");
 
-        /*while((c = br2.read()) != -1) {
-            String word = Integer.toString(c);
+        
 
-            if (!wordLocation(word, characterGrid, 4, 4)) {
-                //alert user which words have not been found
-                System.out.println("Word: " + word + " was not found.");
-            }
-        }*/
         
     }
 
@@ -93,7 +80,7 @@ public class WordFind {
                     }
 
                     //if word length does not exceed array bounds check if word is West
-                    if (rowIndex - word.length() >= -1 && columnIndex + word.length() <= rowLength) {
+                    if (rowIndex - word.length() > -1 && columnIndex + word.length() < rowLength) {
                         if (NorthEast(word, wordGrid, rowIndex, columnIndex)) {
                             System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North East");
                             return true;
@@ -104,9 +91,7 @@ public class WordFind {
         }
         return false;
     }
-
-
-
+    
 
     public static boolean North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
         int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
@@ -179,8 +164,6 @@ public class WordFind {
         }
         return true;
     }
-
-
 }
 
 
