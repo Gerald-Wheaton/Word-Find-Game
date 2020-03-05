@@ -5,43 +5,49 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class WordFind {
     public static void main(String[] args) throws IOException {
 
-        File f=new File("filename.txt");     //Creation of File Descriptor for input file
-        FileReader fr=new FileReader(f);   //Creation of File Reader object
-        BufferedReader br=new BufferedReader(fr);  //Creation of BufferedReader object
-        char[][] characterGrid = new char[4][4];
-        int c = 0, i = 0, j= 0;    
-        String word = "MJED"; //test string
+        File gridFile=new File("filename.txt");
+            FileReader fr1=new FileReader(gridFile);
+            BufferedReader br1=new BufferedReader(fr1);
+        File wordList=new File("wordsList.txt");
+            FileReader fr2=new FileReader(wordList);
+            BufferedReader br2=new BufferedReader(fr2);
 
-        //while loop to read in character file and omit anything that is not a character
-        while((c = br.read()) != -1) {         //Read char by Char
-            char character = (char) c;          //converting integer to char
+        char[][] characterGrid = new char[4][4]; //contains the 2d character grid
+        int c = 0, i = 0, j= 0;    
+        //String word = "MIGA"; //test string
+
+        //while loop to read in grid of characters file and omit anything that is not a character
+        while((c = br1.read()) != -1) {         //Read char by Char
+            char character = (char) c;          //converting integer to character
+            if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
+                j = 0;
+                i++;
+            }
             if (character != '-' && character != '|' && character != '\n') {
                 characterGrid[i][j] = character;
                 j++;
-                if (j == 4) {
-                    j = 0;
-                    i++;
-                }
             }
-            //System.out.println(character);        //Display the Character
         }
 
-        //prints out grid of characters only
         for (int q = 0; q < 4; q++) {
             for (int g = 0; g < 4; g++) {
                 System.out.print(characterGrid[q][g]);
             }
             System.out.println();
         }
+
+        /*while((c = br2.read()) != -1) {
+            String word = Integer.toString(c);
+
+            if (!wordLocation(word, characterGrid, 4, 4)) {
+                //alert user which words have not been found
+                System.out.println("Word: " + word + " was not found.");
+            }
+        }*/
         
-        //alert user which words have not been found
-        if (!wordLocation(word, characterGrid, 4, 4)) {
-            System.out.println("Word: " + word + " not found.");
-        }
     }
 
     //returns false if the word is not found
