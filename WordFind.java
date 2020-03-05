@@ -12,25 +12,35 @@ public class WordFind {
         FileReader fr=new FileReader(gridFile);
         BufferedReader br=new BufferedReader(fr);
         
-        char[][] characterGrid = new char[4][4]; //contains the 2d character grid
-        int c = 0, i = 0, j= 0;    
+        char[][] characterGrid; //contains the 2d character grid
+        int c = 0, i = 0, j= 0, rowLength = 0, colLength = 0;
         String word = "MJED"; //test string
 
-        //while loop to read in grid of characters file and omit anything that is not a character
+        //get grid dimensions
         while((c = br.read()) != -1) {         //Read char by Char
             char character = (char) c;          //converting integer to character
             if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
+                rowLength = j;
                 j = 0;
                 i++;
+                colLength = i + 1;
             }
             if (character != '-' && character != '|' && character != '\n') {
-                characterGrid[i][j] = character;
                 j++;
             }
         }
 
-        System.out.println(characterGrid.length + " row length");
-        System.out.println(characterGrid[0].length + " column length");
+            characterGrid = new char[rowLength][colLength];
+
+        System.out.println(rowLength + " row length");
+        System.out.println(colLength + " column length");
+
+        for (int q = 0; q < characterGrid.length; q++) {
+            for (int g = 0; g < characterGrid.length; g++) {
+                System.out.print(characterGrid[q][g]);
+            }
+            System.out.println();
+        }
 
         
 
