@@ -9,10 +9,10 @@ public class WordFind {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br=new BufferedReader(new FileReader("cashiers.txt"));
-        
+  
         char[][] characterGrid = new char[4][4]; //contains the 2d character grid
         int g = 0, i = 0, j= 0, rowLength = 0, colLength = 0;
-        String word = "ANTIQUE"; //test string
+        String word = "GQX"; //test string
 
         //get grid dimensions
         while((g = br.read()) != -1) {         //Read char by Char
@@ -36,6 +36,7 @@ public class WordFind {
 
         //read in grid to 2d array
             characterGrid = new char[rowLength][colLength];
+            //resetting the loop variables
             i = 0;
             j = 0;
             g = 0;
@@ -50,7 +51,7 @@ public class WordFind {
                 j++;
             }
         }
-        
+
         System.out.println("row length: " + rowLength + " column length: " + colLength + "\n");
 
         for (int r = 0; r < characterGrid.length; r++) {
@@ -59,128 +60,114 @@ public class WordFind {
             }
             System.out.println();
         }
-
+        
+        if(wordLocation(word, characterGrid, rowLength, colLength) < 0) {
+            System.out.println(word + " not found.");
+        }
     }
 
-    //returns false if the word is not found
-    public static boolean wordLocation(String word, char[][] wordGrid, int rowLength, int colLength) {
+
+    //returns -1 if the word is not found
+    public static int wordLocation(String word, char[][] wordGrid, int rowLength, int colLength) {
         for (int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
             for (int columnIndex = 0; columnIndex < colLength; columnIndex++) {
                 if (wordGrid[rowIndex][columnIndex] == word.charAt(0)) {
-                    //if word length does not exceed array bounds check if word is North
-                    if ((rowIndex - word.length()) >= -1 ) {
-                        if (North(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North");
-                            return true;
-                        }
+
+                    //checking word orientation
+                    if (North(word, wordGrid, rowIndex, columnIndex) > 0) {
+                        System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North");
+                        return 1;
                     }
 
-                    //if word length does not exceed array bounds check if word is South
-                    if ((rowIndex + word.length()) <= colLength) {
-                        if (South(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented South");
-                            return true;
-                        }
+                    if (South(word, wordGrid, rowIndex, columnIndex, colLength) > 0) {
+                        System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented South");
+                        return 1;
                     }
 
-                    //if word length does not exceed array bounds check if word is East
                     if ((columnIndex + word.length()) <= rowLength) {
-                        if (East(word, wordGrid, rowIndex, columnIndex)) {
+                        if (East(word, wordGrid, rowIndex, columnIndex, rowLength) > 0) {
                             System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented East");
-                            return true;
+                            return 1;
                         }
                     }
                 
-                    //if word length does not exceed array bounds check if word is West
                     if ((columnIndex - word.length()) >= -1) {
-                        if (West(word, wordGrid, rowIndex, columnIndex)) {
+                        if (West(word, wordGrid, rowIndex, columnIndex) > 0) {
                             System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented West");
-                            return true;
-                        }
-                    }
-
-                    //if word length does not exceed array bounds check if word is West
-                    if (rowIndex - word.length() > -1 && columnIndex + word.length() < rowLength) {
-                        if (NorthEast(word, wordGrid, rowIndex, columnIndex)) {
-                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented North East");
-                            return true;
+                            return 1;
                         }
                     }
                 }
             }
         }
-        return false;
+        return -1;
     }
 
-        public static boolean North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
-            int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
-            for (int i = rowIndex; i > rowIndex - word.length(); i--) {
-                //if current character in the grid != currnet character in the word exit the loop
-                if (wordGrid[i][columnIndex] != word.charAt(currentChar)) {
-                    return false;
-                }
-                else {
-                    currentChar++;
-                }
-            }
-            return true;
-        }
-
-        public static boolean South(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
-            int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
-            for (int i = rowIndex; i < word.length(); i++) {
-                //if current character in the grid != currnet character in the word exit the loop
-                if (wordGrid[i][columnIndex] != word.charAt(currentChar)) {
-                    return false;
-                }
-                else {
-                    currentChar++;
-                }
-            }
-            return true;
-        }
-
-        public static boolean East(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
-            int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
-            for (int i = columnIndex; i < word.length(); i++) {
-                //if current character in the grid != currnet character in the word exit the loop
-                if (wordGrid[rowIndex][i] != word.charAt(currentChar)) {
-                    return false;
-                }
-                else {
-                    currentChar++;
-                }
-            }
-            return true;
-        }
-
-        public static boolean West(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
-            int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
-            for (int i = columnIndex; i > columnIndex - word.length(); i--) {
-                //if current character in the grid != currnet character in the word exit the loop
-                if (wordGrid[rowIndex][i] != word.charAt(currentChar)) {
-                    return false;
-                }
-                else {
-                    currentChar++;
-                }
-            }
-            return true;
-        }
-
-        public static boolean NorthEast(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
+    public static int North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
         int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
-        int j = 0; //allows the column index to be incremented separately from the row index
-        for (int i = rowIndex; i < word.length(); i--) {
-            //if current character in the grid != currnet character in the word exit the loop
-            if (wordGrid[i][columnIndex + j] != word.charAt(currentChar)) {
-                return false;
-            }
-            else {
-                currentChar++;
-                j++;
+        for (int i = rowIndex; i > rowIndex - word.length(); i--) {
+            //check next character as long as not out of bounds 
+            if (i > -1) {
+                //if current character in the grid != currnet character in the word exit the loop
+                if (wordGrid[i][columnIndex] != word.charAt(currentChar)) {
+                    return -1;
+                }
+                else {
+                    currentChar++;
+                }
             }
         }
-        return true;
+        return 1;
+    }
+
+    public static int South(String word, char[][] wordGrid, int rowIndex, int columnIndex, int colLength) {
+        int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
+        for (int i = rowIndex; i < word.length(); i++) {
+            //check next character as long as not out of bounds 
+            if (i < colLength) {
+                //if current character in the grid != currnet character in the word exit the loop
+                if (wordGrid[i][columnIndex] != word.charAt(currentChar)) {
+                    return -1;
+                }
+                else {
+                    currentChar++;
+                }
+            }
+        }
+        return 1;
+    }
+
+    public static int East(String word, char[][] wordGrid, int rowIndex, int columnIndex, int rowLength) {
+        int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
+        for (int i = columnIndex; i < word.length(); i++) {
+            //check next character as long as not out of bounds 
+            if (i < rowLength) {
+                //if current character in the grid != currnet character in the word exit the loop
+                if (wordGrid[rowIndex][i] != word.charAt(currentChar)) {
+                    return -1;
+                }
+                else {
+                    currentChar++;
+                }
+            }
+        }
+        return 1;
+    }
+
+    public static int West(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
+        int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
+        for (int i = columnIndex; i > columnIndex - word.length(); i--) {
+            //check next character as long as not out of bounds 
+            if (i > -1) {
+                //if current character in the grid != currnet character in the word exit the loop
+                if (wordGrid[rowIndex][i] != word.charAt(currentChar)) {
+                    return -1;
+                }
+                else {
+                    currentChar++;
+                }
+            }
+        }
+        return 1;
     }
 }
