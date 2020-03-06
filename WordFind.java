@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class WordFind {
     public static void main(String[] args) throws IOException {
@@ -12,7 +13,9 @@ public class WordFind {
   
         char[][] characterGrid = new char[4][4]; //contains the 2d character grid
         int g = 0, i = 0, j= 0, rowLength = 0, colLength = 0;
-        String word = "GQX"; //test string
+        Scanner scanner = new Scanner(System.in);
+        String word;
+        //String word = "MQD"; //test string
 
         //get grid dimensions
         while((g = br.read()) != -1) {         //Read char by Char
@@ -60,6 +63,11 @@ public class WordFind {
             }
             System.out.println();
         }
+
+        
+        //user inputs a word to search for
+            System.out.print("Enter a word : ");
+            word = scanner.nextLine();  // Read user input
         
         if(wordLocation(word, characterGrid, rowLength, colLength) < 0) {
             System.out.println(word + " not found.");
@@ -88,7 +96,7 @@ public class WordFind {
                         System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented East");
                         return 1;
                     }
-                    
+
                     if (West(word, wordGrid, rowIndex, columnIndex) > 0) {
                         System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented West");
                         return 1;
@@ -100,7 +108,7 @@ public class WordFind {
     }
 
     public static int North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
-        int currentChar = 0; //starts at one since the first character was already checked in the wordLocation function
+        int currentChar = 1; //starts at one since the first character was already checked in the wordLocation function
         for (int i = rowIndex; i > rowIndex - word.length(); i--) {
             //check next character as long as not out of bounds 
             if (i > -1) {
