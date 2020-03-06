@@ -84,18 +84,14 @@ public class WordFind {
                         return 1;
                     }
 
-                    if ((columnIndex + word.length()) <= rowLength) {
-                        if (East(word, wordGrid, rowIndex, columnIndex, rowLength) > 0) {
-                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented East");
-                            return 1;
-                        }
+                    if (East(word, wordGrid, rowIndex, columnIndex, rowLength) > 0) {
+                        System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented East");
+                        return 1;
                     }
-                
-                    if ((columnIndex - word.length()) >= -1) {
-                        if (West(word, wordGrid, rowIndex, columnIndex) > 0) {
-                            System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented West");
-                            return 1;
-                        }
+                    
+                    if (West(word, wordGrid, rowIndex, columnIndex) > 0) {
+                        System.out.println(word + " was found starting at (" + rowIndex + ", " + columnIndex + ") and oriented West");
+                        return 1;
                     }
                 }
             }
