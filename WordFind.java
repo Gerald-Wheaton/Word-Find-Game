@@ -1,8 +1,6 @@
 //Gerald Wheaton
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -16,7 +14,7 @@ public class WordFind {
             System.out.println("\nERROR");
             System.out.println("Must provide command line arguments.");
             System.out.println("Commands must be entered in the following order:");
-            System.out.println("\t gridFilename.txt wordListFileName.txt\n");
+            System.out.println("\t characterGridFilename.txt wordListFileName.txt\n");
             //System.out.println();
         }
         
@@ -35,8 +33,6 @@ public class WordFind {
                         case 1:
                             wordListFile = args[a];
                     }
-                    System.out.print(args[a]);
-                    System.out.println();
                 }
                 System.out.println();
 
@@ -74,8 +70,16 @@ public class WordFind {
                 }
             }
 
-            System.out.println("Square matrix size: " + colLength + " x " + rowLength);
+            //output matrix and size
+            System.out.println("Matrix size: " + colLength + " x " + rowLength);
 
+            for(int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
+                for (int columnIndex = 0; columnIndex < colLength; columnIndex++) {
+                    System.out.print(wordGrid[rowIndex][columnIndex] + "  ");
+                }
+                System.out.println();
+            }
+            
             //read in list of words to search for from a file
             //Search for words in word grid
             Scanner wordScan = new Scanner (new File(wordListFile));
