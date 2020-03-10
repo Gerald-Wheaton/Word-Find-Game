@@ -10,33 +10,53 @@ public class WordFind {
     public static void main(String[] args) throws IOException {
 
         String word;
-        char word2;
+        char character;
         char[][] wordGrid;
-        int matrixSize = 0; //assumes that grid is square
+        int colLength = 0; //assumes that grid is square
+        int rowLength = 0, r = 0, c = 0;
         Scanner fileScan = new Scanner (new File("cashiers.txt"));
 
         while(fileScan.hasNext()) {
-            fileScan.nextLine();
-            matrixSize++;
+            word = fileScan.nextLine();
+            if(word.charAt(0) != '-') {
+                colLength++;
+                rowLength = (word.length() - 1) / 2;
+            }
         }
-
+ 
         fileScan.close();
         Scanner fileScan2 = new Scanner (new File("cashiers.txt"));
 
-        wordGrid = new char[15][15];
+        wordGrid = new char[rowLength][colLength];
         while(fileScan2.hasNext()) {
             word = fileScan2.nextLine();
-            for(int i = 0; i < word.length(); i++) {
-                word2 = word.charAt(i);
-                System.out.print(word2);
+            if(word.charAt(0) != '-') {
+                for(int i = 0; i < word.length(); i++) {
+                    character = word.charAt(i);
+                    if (character != '|') {
+                        wordGrid[r][c] = character;
+                        c++;
+                    }
+                    //System.out.print(word.charAt(i));
+                }
+                //reset columns and increment the row
+                    c = 0;
+                    r++;
+                //System.out.println();
+            }
+        }
+
+        for(int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < colLength; columnIndex++) {
+                System.out.print(wordGrid[rowIndex][columnIndex]);
             }
             System.out.println();
         }
-        System.out.println("Square matrix size: " + matrixSize + " x " + matrixSize);
-        fileScan2.close();
 
-        
+        System.out.println("Square matrix size: " + colLength + " x " + rowLength);
+        fileScan2.close();
     }
+
 
     //returns false if the word is not found
     public static boolean wordLocation(String word, char[][] wordGrid, int rowLength, int colLength) {
