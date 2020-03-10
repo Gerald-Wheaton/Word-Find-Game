@@ -9,40 +9,43 @@ import java.util.Scanner;
 public class WordFind {
     public static void main(String[] args) throws IOException {
 
-        String word;
+        String word, wordToFind;
         char character;
         char[][] wordGrid;
         int colLength = 0; //assumes that grid is square
         int rowLength = 0, r = 0, c = 0;
-        Scanner fileScan = new Scanner (new File("cashiers.txt"));
 
-        while(fileScan.hasNext()) {
-            word = fileScan.nextLine();
+        Scanner fileLengthScan = new Scanner (new File("cashiers.txt"));
+        //counters for row and column lengths
+        while(fileLengthScan.hasNext()) {
+            word = fileLengthScan.nextLine();
             if(word.charAt(0) != '-') {
                 colLength++;
                 rowLength = (word.length() - 1) / 2;
             }
         }
  
-        fileScan.close();
-        Scanner fileScan2 = new Scanner (new File("cashiers.txt"));
+        fileLengthScan.close();
+        Scanner characterScan = new Scanner (new File("cashiers.txt"));
 
         wordGrid = new char[rowLength][colLength];
-        while(fileScan2.hasNext()) {
-            word = fileScan2.nextLine();
+        //loop to read in each line to a string
+        while(characterScan.hasNext()) { 
+            word = characterScan.nextLine();
+            //exclude lines and characters with a '-'
             if(word.charAt(0) != '-') {
+                //exclude lines and characters with a '|'
                 for(int i = 0; i < word.length(); i++) {
                     character = word.charAt(i);
                     if (character != '|') {
                         wordGrid[r][c] = character;
                         c++;
                     }
-                    //System.out.print(word.charAt(i));
                 }
                 //reset columns and increment the row
-                    c = 0;
-                    r++;
-                //System.out.println();
+                //allows loop to iterate through entire file while filling up the 2D array
+                c = 0;
+                r++;
             }
         }
 
@@ -52,9 +55,17 @@ public class WordFind {
             }
             System.out.println();
         }
+        characterScan.close();
 
         System.out.println("Square matrix size: " + colLength + " x " + rowLength);
-        fileScan2.close();
+
+        //read in list of words to search for from a file
+        //Search for words in word grid
+        Scanner wordScan = new Scanner (new File("cashwords.txt"));
+        while(wordScan.hasNext()) { 
+            wordToFind = wordScan.nextLine();
+            wordLocation(wordToFind, wordGrid, rowLength, colLength);
+        }
     }
 
 
@@ -109,7 +120,6 @@ public class WordFind {
         }
         return false;
     }
-
 
     //compass functions
     public static boolean North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
