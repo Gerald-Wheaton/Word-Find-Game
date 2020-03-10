@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - WordFind",
+            "request": "launch",
+            "mainClass": "WordFind",
+            "projectName": "pa02Folder_f3f7eb5b"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}",
