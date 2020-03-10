@@ -9,62 +9,80 @@ import java.util.Scanner;
 public class WordFind {
     public static void main(String[] args) throws IOException {
 
-        String word, wordToFind;
-        char character;
-        char[][] wordGrid;
-        int colLength = 0; //assumes that grid is square
-        int rowLength = 0, r = 0, c = 0;
-
-        Scanner fileLengthScan = new Scanner (new File("cashiers.txt"));
-        //counters for row and column lengths
-        while(fileLengthScan.hasNext()) {
-            word = fileLengthScan.nextLine();
-            if(word.charAt(0) != '-') {
-                colLength++;
-                rowLength = (word.length() - 1) / 2;
-            }
+        //only run program if program recieves both command line arguments
+        //arguments be specified in this order
+            //1) character grid file 2) list of words to find file
+        if (args.length < 1) {
+            System.out.println("\nERROR");
+            System.out.println("Must provide command line arguments.");
+            System.out.println("Commands must be entered in the following order:");
+            System.out.println("\t gridFilename.txt wordListFileName.txt\n");
+            //System.out.println();
         }
- 
-        fileLengthScan.close();
-        Scanner characterScan = new Scanner (new File("cashiers.txt"));
+        
+        else {
+            String word, wordToFind, characterGridFile = "", wordListFile = "";
+            char character;
+            char[][] wordGrid;
+            int colLength = 0; //assumes that grid is square
+            int rowLength = 0, r = 0, c = 0;
 
-        wordGrid = new char[rowLength][colLength];
-        //loop to read in each line to a string
-        while(characterScan.hasNext()) { 
-            word = characterScan.nextLine();
-            //exclude lines and characters with a '-'
-            if(word.charAt(0) != '-') {
-                //exclude lines and characters with a '|'
-                for(int i = 0; i < word.length(); i++) {
-                    character = word.charAt(i);
-                    if (character != '|') {
-                        wordGrid[r][c] = character;
-                        c++;
+                for(int a = 0; a < args.length; a++) {
+                    switch (a){
+                        case 0:
+                            characterGridFile = args[a];
+                            break;
+                        case 1:
+                            wordListFile = args[a];
                     }
+                    System.out.print(args[a]);
+                    System.out.println();
                 }
-                //reset columns and increment the row
-                //allows loop to iterate through entire file while filling up the 2D array
-                c = 0;
-                r++;
+                System.out.println();
+
+            Scanner fileLengthScan = new Scanner (new File(characterGridFile));
+            //counters for row and column lengths
+            while(fileLengthScan.hasNext()) {
+                word = fileLengthScan.nextLine();
+                if(word.charAt(0) != '-') {
+                    colLength++;
+                    rowLength = (word.length() - 1) / 2;
+                }
             }
-        }
+    
+            fileLengthScan.close();
+            Scanner characterScan = new Scanner (new File(characterGridFile));
 
-        for(int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < colLength; columnIndex++) {
-                System.out.print(wordGrid[rowIndex][columnIndex]);
+            wordGrid = new char[rowLength][colLength];
+            //loop to read in each line to a string
+            while(characterScan.hasNext()) { 
+                word = characterScan.nextLine();
+                //exclude lines and characters with a '-'
+                if(word.charAt(0) != '-') {
+                    //exclude lines and characters with a '|'
+                    for(int i = 0; i < word.length(); i++) {
+                        character = word.charAt(i);
+                        if (character != '|') {
+                            wordGrid[r][c] = character;
+                            c++;
+                        }
+                    }
+                    //reset columns and increment the row
+                    //allows loop to iterate through entire file while filling up the 2D array
+                    c = 0;
+                    r++;
+                }
             }
-            System.out.println();
-        }
-        characterScan.close();
 
-        System.out.println("Square matrix size: " + colLength + " x " + rowLength);
+            System.out.println("Square matrix size: " + colLength + " x " + rowLength);
 
-        //read in list of words to search for from a file
-        //Search for words in word grid
-        Scanner wordScan = new Scanner (new File("cashwords.txt"));
-        while(wordScan.hasNext()) { 
-            wordToFind = wordScan.nextLine();
-            wordLocation(wordToFind, wordGrid, rowLength, colLength);
+            //read in list of words to search for from a file
+            //Search for words in word grid
+            Scanner wordScan = new Scanner (new File(wordListFile));
+            while(wordScan.hasNext()) { 
+                wordToFind = wordScan.nextLine();
+                wordLocation(wordToFind, wordGrid, rowLength, colLength);
+            }
         }
     }
 
