@@ -9,81 +9,33 @@ import java.util.Scanner;
 public class WordFind {
     public static void main(String[] args) throws IOException {
 
-        BufferedReader br=new BufferedReader(new FileReader("cashiers.txt"));
-  
-        char[][] characterGrid = new char[4][4]; //contains the 2d character grid
-        int g = 0, i = 0, j= 0, rowLength = 0, colLength = 0;
-        Scanner scanner = new Scanner(System.in);
         String word;
+        char word2;
+        char[][] wordGrid;
+        int matrixSize = 0; //assumes that grid is square
+        Scanner fileScan = new Scanner (new File("cashiers.txt"));
 
-        Scanner s1 = new Scanner(new File("filename.txt"));
-        int numStrings = 0;
-
-        while (s1.hasNextLine()) {
-            numStrings = numStrings + 1;
+        while(fileScan.hasNext()) {
+            fileScan.nextLine();
+            matrixSize++;
         }
 
-        String[] words = new String[numStrings];
-        Scanner s2 = new Scanner(new File("filename.txt"));
-        for (int i = 0; i < numStrings; i++) {
-            words[i] = s2.next();
-        }
+        fileScan.close();
+        Scanner fileScan2 = new Scanner (new File("cashiers.txt"));
 
-        //get grid dimensions
-        while((g = br.read()) != -1) {          //Read in characters
-            char character = (char) g;          //convert integer to character
-            if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
-                rowLength = j;
-                j = 0;
-                i++;
-                colLength = i;
-            }
-            if (character != '-' && character != '|' && character != '\n') {
-                j++;
-            }
-        }
-
-        //close file
-        br.close();
-
-        //open file so grid can be read in
-        BufferedReader br2=new BufferedReader(new FileReader("cashiers.txt"));
-
-        //read in grid to 2d array
-            characterGrid = new char[rowLength][colLength];
-            //resetting the loop variables
-            i = 0;
-            j = 0;
-            g = 0;
-        while((g = br2.read()) != -1) {         //Read in characters
-            char character = (char) g;          //convert integer to character
-            if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
-                j = 0;
-                i++;
-            }
-            if (character != '-' && character != '|' && character != '\n' && j < colLength && i < rowLength) {
-                characterGrid[i][j] = character;
-                j++;
-            }
-        }
-
-        System.out.println("row length: " + rowLength + " column length: " + colLength + "\n");
-
-        for (int r = 0; r < characterGrid.length; r++) {
-            for (int c = 0; c < characterGrid[0].length; c++) {
-                System.out.print(characterGrid[r][c]);
+        wordGrid = new char[15][15];
+        while(fileScan2.hasNext()) {
+            word = fileScan2.nextLine();
+            for(int i = 0; i < word.length(); i++) {
+                word2 = word.charAt(i);
+                System.out.print(word2);
             }
             System.out.println();
         }
+        System.out.println("Square matrix size: " + matrixSize + " x " + matrixSize);
+        fileScan2.close();
 
         
-        //user inputs a word to search for
-            System.out.print("Enter a word : ");
-            word = scanner.nextLine();  // Read user input
-            
-            if(wordLocation(word, characterGrid, rowLength, colLength) == false) {
-                System.out.println(word + " not found.");
-            }
     }
 
     //returns false if the word is not found
@@ -245,8 +197,4 @@ public class WordFind {
         }
         return true;
     }
-
-
-
-
 }
