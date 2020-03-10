@@ -15,11 +15,23 @@ public class WordFind {
         int g = 0, i = 0, j= 0, rowLength = 0, colLength = 0;
         Scanner scanner = new Scanner(System.in);
         String word;
-        //String word = "MQD"; //test string
+
+        Scanner s1 = new Scanner(new File("filename.txt"));
+        int numStrings = 0;
+
+        while (s1.hasNextLine()) {
+            numStrings = numStrings + 1;
+        }
+
+        String[] words = new String[numStrings];
+        Scanner s2 = new Scanner(new File("filename.txt"));
+        for (int i = 0; i < numStrings; i++) {
+            words[i] = s2.next();
+        }
 
         //get grid dimensions
-        while((g = br.read()) != -1) {         //Read char by Char
-            char character = (char) g;          //converting integer to character
+        while((g = br.read()) != -1) {          //Read in characters
+            char character = (char) g;          //convert integer to character
             if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
                 rowLength = j;
                 j = 0;
@@ -31,10 +43,10 @@ public class WordFind {
             }
         }
 
-        //close the file
+        //close file
         br.close();
 
-        //open the file so I can read in the grid
+        //open file so grid can be read in
         BufferedReader br2=new BufferedReader(new FileReader("cashiers.txt"));
 
         //read in grid to 2d array
@@ -43,8 +55,8 @@ public class WordFind {
             i = 0;
             j = 0;
             g = 0;
-        while((g = br2.read()) != -1) {         //Read char by Char
-            char character = (char) g;          //converting integer to character
+        while((g = br2.read()) != -1) {         //Read in characters
+            char character = (char) g;          //convert integer to character
             if (character == '\n') { //once the end of line is reached this resets the column index variable and increments the row index
                 j = 0;
                 i++;
@@ -126,6 +138,8 @@ public class WordFind {
         return false;
     }
 
+
+    //compass functions
     public static boolean North(String word, char[][] wordGrid, int rowIndex, int columnIndex) {
         if (rowIndex < word.length() - 1) {
             return false;
