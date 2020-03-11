@@ -42,7 +42,7 @@ public class WordFind {
                 word = fileLengthScan.nextLine();
                 if(word.charAt(0) != '-') {
                     colLength++;
-                    rowLength = (word.length() - 1) / 2;
+                    rowLength = (word.length()-1) / 2;
                 }
             }
     
@@ -58,7 +58,7 @@ public class WordFind {
                     //exclude lines and characters with a '|'
                     for(int i = 0; i < word.length(); i++) {
                         character = word.charAt(i);
-                        if (character != '|') {
+                        if (Character.isAlphabetic(character)/*character != '|'*/) {
                             wordGrid[r][c] = character;
                             c++;
                         }
@@ -90,7 +90,7 @@ public class WordFind {
         }
     }
 
-
+    //find word
     //returns false if the word is not found
     public static boolean wordLocation(String word, char[][] wordGrid, int rowLength, int colLength) {
         for (int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
