@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class WordFind {
     public static void main(String[] args) throws IOException {
-
         //only run program if program recieves both command line arguments
         //arguments be specified in this order
             //1) character grid file 2) list of words to find file
@@ -15,28 +14,40 @@ public class WordFind {
             System.out.println("Must provide command line arguments.");
             System.out.println("Commands must be entered in the following order:");
             System.out.println("\t characterGridFilename.txt wordListFileName.txt\n");
-            //System.out.println();
+            System.out.println();
         }
         
-        else {
-            String word, wordToFind, characterGridFile = "", wordListFile = "";
-            char character;
-            char[][] wordGrid;
-            int colLength = 0; //assumes that grid is square
-            int rowLength = 0, r = 0, c = 0;
+        else if (args.length > 0) {
+            String characterGridFile = "", wordListFile = "", wordToFind = "";
 
-                for(int a = 0; a < args.length; a++) {
-                    switch (a){
-                        case 0:
-                            characterGridFile = args[a];
-                            break;
-                        case 1:
-                            wordListFile = args[a];
-                    }
-                }
+            if (args.length == 2) {
+                characterGridFile = args[0];
+                wordListFile = args[1];
                 System.out.println();
+            }
+            else { //if only one argument entered, assume it is a grid file and pass the name to the variable
+                characterGridFile = args[0];
+            }
 
-            Scanner fileLengthScan = new Scanner (new File(characterGridFile));
+            GetGridAndWordSearch(characterGridFile, wordListFile, wordToFind);
+
+        }
+
+        else {
+            System.out.println("\nERROR");
+            System.out.println("Must provide at least the grid file name as an argument");
+            System.out.println();
+        }
+    }
+
+    public static void GetGridAndWordSearch(String characterGridFile, String wordListFile, String wordToFind) throws IOException {
+        String word;
+        char character;
+        char[][] wordGrid;
+        int colLength = 0; //assumes that grid is square
+        int rowLength = 0, r = 0, c = 0;
+
+        Scanner fileLengthScan = new Scanner (new File(characterGridFile));
             //counters for row and column lengths
             while(fileLengthScan.hasNext()) {
                 word = fileLengthScan.nextLine();
@@ -70,22 +81,41 @@ public class WordFind {
                 }
             }
 
-            //output matrix and size
-            System.out.println("Matrix size: " + colLength + " x " + rowLength);
+            SearchForWords(wordListFile, wordToFind, wordGrid, rowLength, colLength);
+    }
 
-            for(int rowIndex = 0; rowIndex < rowLength; rowIndex++) {
-                for (int columnIndex = 0; columnIndex < colLength; columnIndex++) {
-                    System.out.print(wordGrid[rowIndex][columnIndex] + "  ");
+    public static void SearchForWords(String wordListFile, String wordToFind, char[][] wordGrid, int rowLength, int colLength) throws IOException {
+
+        Scanner input = new Scanner(System.in);
+
+        if (wordListFile == "") { //if no word list file was entered begin interactive mode
+
+            while(!wordToFind.equals("q")){
+
+                System.out.print("Enter a word or 'q' to exit: ");
+                wordToFind = input.nextLine();
+                wordToFind = wordToFind.replaceAll("\\s", ""); //removes whitespace in string
+
+                if(!wordToFind.equals("q")) {
+                    System.out.println();
+                    if(!wordLocation(wordToFind, wordGrid, rowLength, colLength)) {
+                        System.out.println(wordToFind + " not found");
+                    }
+                    System.out.println();
                 }
-                System.out.println();
             }
-            
+        }
+        else {
             //read in list of words to search for from a file
             //Search for words in word grid
             Scanner wordScan = new Scanner (new File(wordListFile));
             while(wordScan.hasNext()) { 
                 wordToFind = wordScan.nextLine();
-                wordLocation(wordToFind, wordGrid, rowLength, colLength);
+                wordToFind = wordToFind.replaceAll("\\s", ""); //removes whitespace in string
+
+                if(!wordLocation(wordToFind, wordGrid, rowLength, colLength)) {
+                    System.out.println(wordToFind + " not found");
+                }
             }
         }
     }
